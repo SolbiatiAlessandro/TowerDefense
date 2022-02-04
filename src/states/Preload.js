@@ -21,7 +21,7 @@ export default class Preload {
     this.load.setPreloadSprite(this.asset);
 
     //do all your loading here
-    //this.load.image('player', 'assets/images/player.png'); //width and height of sprite
+    this.load.pack('level1', 'assets/assetPack.json', null, this);
 
 
     //staaaart load
