@@ -8,6 +8,7 @@ export default class Game extends Phaser.State {
   }
 
   create() {
+	  this.game.plugins.add(new Phaser.Plugin.Isometric(this.game));
   }
 
 
