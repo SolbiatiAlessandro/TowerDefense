@@ -25,6 +25,9 @@ export default class Game extends Phaser.State {
 	  this.allies = this.game.add.group(this.isoChars);
 	  var _human = new Human(this.game, 200, 200);
 	  this.allies.add(_human);
+	  var _skeleton = new Skeleton(this.game, 300, 200);
+	  this.allies.add(_skeleton);
+	  
   }
 
 
