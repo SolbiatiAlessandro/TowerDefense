@@ -6,7 +6,7 @@ export default class Skeleton extends Phaser.Plugin.Isometric.IsoSprite{
 		this.animations.add('hurt', [12]);
 		this.animations.add('attack', [13,14,13,14,14,13,14]);
 
-		this.animations.play.('walk', 2, true);
+		this.animations.play('walk', 2, true);
 
 		this.anchor.setTo(.5, .5);
 
