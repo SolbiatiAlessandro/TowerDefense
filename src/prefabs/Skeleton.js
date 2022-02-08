@@ -20,12 +20,13 @@ export default class Skeleton extends Phaser.Plugin.Isometric.IsoSprite{
 		this.pathFinished = new Phaser.Signal();
 	}
 
+	/*
 	damage(value){
 		this.health -= value;
 		if (this.health <= 0){
 			this.kill();
 		}
-	}
+	}*/
 
 	setPath(path){
 		this.path = path;
