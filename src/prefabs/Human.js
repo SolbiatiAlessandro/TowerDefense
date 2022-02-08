@@ -10,7 +10,7 @@ export default class Human extends Phaser.Plugin.Isometric.IsoSprite {
 		this.enemies = enemies;
 		this.arrows = arrows;
 
-		this.showInterval = 400;
+		this.shotInterval = 400;
 		this.shotTime = this.game.time.now + this.shotInterval;
 	}
 
@@ -19,7 +19,7 @@ export default class Human extends Phaser.Plugin.Isometric.IsoSprite {
 			this.target = this.enemies.findNearest(this.x, this.y);
 
 			if(this.target){
-				var arrow = this.arows.getFirstDead();
+				var arrow = this.arrows.getFirstDead();
 				if(!arrow) arrow = this.arrows.create(0, 0, 'arrow');
 				arrow.revive();
 				arrow.x = this.x;
@@ -29,7 +29,7 @@ export default class Human extends Phaser.Plugin.Isometric.IsoSprite {
 				arrow.rotation = this.game.physics.arcade.moveToObject(
 					arrow, this.target, 120);
 				
-				this.shotTime = this.game.time.now + this.showInterval;
+				this.shotTime = this.game.time.now + this.shotInterval;
 			}
 		}
 	}

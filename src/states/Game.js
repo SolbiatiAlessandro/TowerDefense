@@ -26,7 +26,7 @@ class Enemies {
 				}
 			}
 		}, this._enemies, true); // what's true
-		return lowerChild;
+		return lowestChild;
 	}
 
 	add(obj){
@@ -101,7 +101,7 @@ export default class Game extends Phaser.State {
 		  }
 	  }
 
-	  this.game.physics.arcade.overlap(this.arrows, this.enemies, this.arrowHitEnemy, null, this);
+	  this.game.physics.arcade.overlap(this.arrows, this.enemies._enemies, this.arrowHitEnemy, null, this);
 
 	  if(this.game.time.now > this.nextSpawn){
 		  this.spawnEnemy();
