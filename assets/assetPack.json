@@ -8,6 +8,12 @@
         },
         {
             "type": "image",
+            "key": "water",
+            "url": "assets/images/tiles/water.png",
+            "overwrite": false
+        },
+        {
+            "type": "image",
             "key": "dirt",
             "url": "assets/images/tiles/dirt.png",
             "overwrite": false
