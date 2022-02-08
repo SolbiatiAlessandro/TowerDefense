@@ -58,7 +58,8 @@ export default class Game extends Phaser.State {
 	  this.arrows = this.game.add.group();
 	  this.arrows.enableBody = true;
 	  this.arrows.physicsBodyType = Phaser.Physics.ARCADE;
-	  this.scoreBox  = new NumberBox(this.game, 'moneyholder', this.money);
+	  this.healthBox  = new NumberBox(this.game, 'healthholder', this.playerLife, 10, 10);
+	  this.scoreBox  = new NumberBox(this.game, 'moneyholder', this.money, 100, 10);
 
 	  //
 	  // TEST
@@ -104,7 +105,7 @@ export default class Game extends Phaser.State {
 
 	  if(this.game.time.now > this.nextSpawn){
 		  this.spawnEnemy();
-		  this.nextSpawn = this.game.time.now + this.spawnTime;
+		  this.nextSpawn = this.game.time.now + this.spawnTime + 10000;
 	  }
 
 	  this.easystar.calculate();
@@ -123,7 +124,7 @@ export default class Game extends Phaser.State {
 
   enemyAtGoal(enemy){
 	  enemy.kill();
-	  this.playLife --;
+	  this.playerLife -= 1;
 	  this.healthBox.setValue(this.playerLife);
 	  if(this.playerLife <= 0){
 		  this.gameOver();
@@ -192,6 +193,7 @@ export default class Game extends Phaser.State {
   }
 
   pathFound(path){
+	  console.log(path);
 	  if (path != null){
 		  this.convertedPath = [];
 		  var curPoint;

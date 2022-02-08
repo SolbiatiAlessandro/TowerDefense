@@ -1,7 +1,7 @@
 export default class NumberBox extends Phaser.Group {
-	constructor(game, bgasset, val, parent){
+	constructor(game, bgasset, val, x, y, parent){
 		super(game, parent);
-		this.create(0, 0, bgasset);
+		this.create(x, y, bgasset);
 		var style = {
 			font: "30px arial",
 			align: "center",
@@ -9,8 +9,8 @@ export default class NumberBox extends Phaser.Group {
 		};
 		this.txtValue = new Phaser.Text(
 			this.game,
-			55,
-			55,
+			x + 35,
+			y + 45,
 			val.toString(),
 			style
 		);
