@@ -14,6 +14,7 @@
   ],
   "dependencies": {
     "phaser": "~2.2.2",
-    "phaser-plugin-isometric": "*"
+    "phaser-plugin-isometric": "*",
+    "easystarjs": "*"
   }
 }
