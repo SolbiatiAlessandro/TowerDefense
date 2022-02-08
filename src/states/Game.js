@@ -4,6 +4,32 @@ import Human from '../prefabs/Human.js';
 import Skeleton from '../prefabs/Skeleton.js';
 import NumberBox from '../prefabs/NumberBox.js';
 
+class Enemies {
+	constructor(game, parentGroup){
+	    this.game = game;
+	    this._enemies = this.game.add.group(parentGroup);
+	}
+
+	findNearest(xc, yc){
+		var lowestChild = null;
+		var lowestDistance = 10000000;
+
+		this._enemies.forEach(function(child){
+			var distance = Phaser.Math.distance(xc, yc, child.x, child.y);
+
+			if(!lowestChild){
+				lowestChild = child;
+			} else {
+				if (distance < lowestDistance){
+					lowestChild = child;
+					lowestDistance = distance;
+				}
+			}
+		}, this._enemies, true); // what's true
+		return lowerChild;
+	}
+}
+
 export default class Game extends Phaser.State {
 
   constructor() {
@@ -24,10 +50,18 @@ export default class Game extends Phaser.State {
 	  this.isoGroup = this.game.add.group();
 	  this.isoChars = this.game.add.group();
 	  this.allies = this.game.add.group(this.isoChars);
-	  var _human = new Human(this.game, 200, 200);
-	  this.allies.add(_human);
-	  var _skeleton = new Skeleton(this.game, 300, 200);
-	  this.allies.add(_skeleton);
+	  this.enemies = new Enemies(this.game, this.isoChars);
+	  this.arrows = this.game.add.group();
+	  this.arrows.enableBody = true;
+	  this.arrows.physicsBodyType = Phaser.Physics.ARCADE;
+
+	  //
+	  // TEST
+	  //var _human = new Human(this.game, 200, 200);
+	  //this.allies.add(_human);
+	  //var _skeleton = new Skeleton(this.game, 300, 200);
+	  //this.allies.add(_skeleton);
+
 	  this.spawnTiles();
 	  
   }
