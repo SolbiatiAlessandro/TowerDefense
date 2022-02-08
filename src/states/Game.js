@@ -28,6 +28,10 @@ class Enemies {
 		}, this._enemies, true); // what's true
 		return lowerChild;
 	}
+
+	add(obj){
+		this._enemies.add(obj);
+	}
 }
 
 export default class Game extends Phaser.State {
@@ -36,7 +40,7 @@ export default class Game extends Phaser.State {
     //object level properties
     super();
 	this.playerLife = 10;
-	this.money = 100;
+	this.money = 500;
 	this.spawnTime = 1000;
   }
 
@@ -54,13 +58,14 @@ export default class Game extends Phaser.State {
 	  this.arrows = this.game.add.group();
 	  this.arrows.enableBody = true;
 	  this.arrows.physicsBodyType = Phaser.Physics.ARCADE;
+	  this.scoreBox  = new NumberBox(this.game, 'moneyholder', this.money);
 
 	  //
 	  // TEST
-	  var _human = new Human(this.game, 200, 200);
-	  this.allies.add(_human);
-	  var _skeleton = new Skeleton(this.game, 300, 200);
-	  this.allies.add(_skeleton);
+	  //var _human = new Human(this.game, 200, 200);
+	  //this.allies.add(_human);
+	  //var _skeleton = new Skeleton(this.game, 300, 200);
+	  //this.allies.add(_skeleton);
 
 	  this.spawnTiles();
 
@@ -78,6 +83,65 @@ export default class Game extends Phaser.State {
   update() {
 	  this.game.iso.unproject(this.game.input.activePointer.position, this.cursorPos);
 	  this.isoGroup.forEach(this.checkTiles, this, false);
+	  if(this.game.input.activePointer.isDown && this.selectedTile ) { // how could this.selectedTile be null?
+		  if(!this.selectedTile.occupant && this.selectedTile.buyable){
+			  if(this.money >= 100){
+				  var human = new Human(
+					  this.game,
+					  this.selectedTile.isoX,
+					  this.selectedTile.isoY,
+					  this.enemies,
+					  this.arrows);
+				  this.allies.add(human);
+				  this.selectedTile.occupant = human;
+				  this.money -= 100;
+				  this.scoreBox.setValue(this.money);
+			  }
+		  }
+	  }
+
+	  this.game.physics.arcade.overlap(this.arrows, this.enemies, this.arrowHitEnemy, null, this);
+
+	  if(this.game.time.now > this.nextSpawn){
+		  this.spawnEnemy();
+		  this.nextSpawn = this.game.time.now + this.spawnTime;
+	  }
+
+	  this.easystar.calculate();
+	  this.game.iso.simpleSort(this.enemies._enemies);
+  }
+
+  spawnEnemy(){
+	  var skel = new Skeleton(
+		  this.game,
+		  this.convertedPath[0].x, this.convertedPath[0].y);
+	  skel.setPath(this.convertedPath);
+	  skel.advanceTile();
+	  skel.pathFinished.addOnce(this.enemyAtGoal, this);
+	  this.enemies.add(skel);
+  }
+
+  enemyAtGoal(enemy){
+	  enemy.kill();
+	  this.playLife --;
+	  this.healthBox.setValue(this.playerLife);
+	  if(this.playerLife <= 0){
+		  this.gameOver();
+	  }
+  }
+
+  gameOver(){
+	  this.game.state.start('gameover');
+  }
+
+  
+  arrowHitEnemy(arrow, enemy){
+	  arrow.kill();
+	  enemy.damage(1);
+	  if(!enemy.alive){
+		  this.money += enemy.worth;
+		  this.scoreBox.setValue(this.money);
+	  }
   }
 
 
@@ -94,6 +158,7 @@ export default class Game extends Phaser.State {
 		  tile.tint = 0xffffff;
 		  this.game.add.tween(tile).to({isoZ: 0}, 200, Phaser.Easing.Quadratic.InOut, true);
 	  }
+
 
   }
 
