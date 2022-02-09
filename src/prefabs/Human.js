@@ -10,7 +10,7 @@ export default class Human extends Phaser.Plugin.Isometric.IsoSprite {
 		this.enemies = enemies;
 		this.arrows = arrows;
 
-		this.shotInterval = 400;
+		this.shotInterval = 1000;
 		this.shotTime = this.game.time.now + this.shotInterval;
 	}
 

@@ -39,12 +39,13 @@ export default class Game extends Phaser.State {
   constructor() {
     //object level properties
     super();
-	this.playerLife = 10;
-	this.money = 500;
-	this.spawnTime = 1000;
   }
 
   create() {
+  	this.playerLife = 10;
+  	this.humans = 0;
+  	this.money = 50;
+  	this.spawnTime = 2000;
       this.mapData =  this.game.cache.getJSON('mapdata');
 	  this.game.physics.startSystem(Phaser.Physics.ARCADE)
 	  this.game.time.advancedTiming = true;
@@ -86,7 +87,7 @@ export default class Game extends Phaser.State {
 	  this.isoGroup.forEach(this.checkTiles, this, false);
 	  if(this.game.input.activePointer.isDown && this.selectedTile ) { // how could this.selectedTile be null?
 		  if(!this.selectedTile.occupant && this.selectedTile.buyable){
-			  if(this.money >= 100){
+			  if(this.money >= 50){
 				  var human = new Human(
 					  this.game,
 					  this.selectedTile.isoX,
@@ -95,8 +96,12 @@ export default class Game extends Phaser.State {
 					  this.arrows);
 				  this.allies.add(human);
 				  this.selectedTile.occupant = human;
-				  this.money -= 100;
+				  this.money -= 50;
 				  this.scoreBox.setValue(this.money);
+				  this.humans += 1;
+				  if (this.humans == 16){
+					  this.game.state.start('victory');
+				  }
 			  }
 		  }
 	  }
@@ -105,7 +110,7 @@ export default class Game extends Phaser.State {
 
 	  if(this.game.time.now > this.nextSpawn){
 		  this.spawnEnemy();
-		  this.nextSpawn = this.game.time.now + this.spawnTime + 10000;
+		  this.nextSpawn = this.game.time.now + this.spawnTime + (Math.random() * this.spawnTime);
 	  }
 
 	  this.easystar.calculate();
@@ -142,6 +147,7 @@ export default class Game extends Phaser.State {
 	  if(!enemy.alive){
 		  this.money += enemy.worth;
 		  this.scoreBox.setValue(this.money);
+		  this.spawnTime = Math.max(0, this.spawnTime - 100);
 	  }
   }
 

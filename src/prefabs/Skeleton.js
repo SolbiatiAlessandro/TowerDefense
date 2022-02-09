@@ -16,6 +16,7 @@ export default class Skeleton extends Phaser.Plugin.Isometric.IsoSprite{
 
 		this.health = 5;
 		this.worth = 20;
+		this.speed = 1000 + Math.random() * 3000;
 
 		this.pathFinished = new Phaser.Signal();
 	}
@@ -47,7 +48,7 @@ export default class Skeleton extends Phaser.Plugin.Isometric.IsoSprite{
 			this.walkMotion = this.game.add.tween(this).to({
 					isoX: this.path[this.pathPosition].x,
 					isoY: this.path[this.pathPosition].y,
-				},	2000, Phaser.Easing.Linear.None, true);
+				},	this.speed, Phaser.Easing.Linear.None, true);
 			this.walkMotion.onComplete.add(this.advanceTile, this);
 		} else {
 			this.animations.play("attack", 2);
